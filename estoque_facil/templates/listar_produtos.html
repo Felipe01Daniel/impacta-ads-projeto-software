@@ -13,6 +13,20 @@
         <div class="botao-adicionar">
             <a href="{% url 'adicionar_produto' %}" class="btn-adicionar">Adicionar Produto</a>
         </div>
+        <form method="GET" action="">
+            <div class="form-group">
+                <input type="text" name="nome" placeholder="Filtrar por nome" value="{{ nome_query }}">
+                <select name="categoria">
+                    <option value="">Todas as Categorias</option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}" {% if categoria.id|stringformat:"s" == categoria_query %}selected{% endif %}>
+                            {{ categoria.nome }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn-filtrar">Filtrar</button>
+            </div>
+        </form>
         <div class="produto-list">
             {% for produto in produtos %}
                 <div class="produto-item">
@@ -21,7 +35,6 @@
                     <p><strong>Quantidade:</strong> {{ produto.quantidade }}</p>
                     <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
                     <p><strong>Categoria:</strong> {{ produto.categoria.nome }}</p>
-                    <!-- Botão de Editar -->
                     <a href="{% url 'editar_produto' produto.id %}" class="btn-edit">Editar</a>
                 </div>            
             {% empty %}
