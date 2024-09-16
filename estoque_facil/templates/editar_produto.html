@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adicionar Produto</title>
+    <title>Editar Produto</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/adicionar_produto.css' %}">
 </head>
 <body>
     <div class="container">
-        <h1>Adicionar Novo Produto</h1>
+        <h1>Editar Produto: {{ produto.nome }}</h1>
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
                 {{ form.as_p }}
             </div>
-            <button type="submit" class="btn">Adicionar Produto</button>
+            <button type="submit" class="btn">Salvar Alterações</button>
         </form>
-        <!-- Botão para a lista de produtos -->
-        <a href="{% url 'listar_produtos' %}" class="btn-list">Ver Lista de Produtos</a>
-    </div>    
+        <!-- Botão para voltar para a lista de produtos -->
+        <a href="{% url 'listar_produtos' %}" class="btn-list">Voltar para a Lista de Produtos</a>
+    </div>
 </body>
 </html>

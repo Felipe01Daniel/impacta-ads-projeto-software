@@ -10,6 +10,9 @@
 <body>
     <div class="container">
         <h1>Lista de Produtos</h1>
+        <div class="botao-adicionar">
+            <a href="{% url 'adicionar_produto' %}" class="btn-adicionar">Adicionar Produto</a>
+        </div>
         <div class="produto-list">
             {% for produto in produtos %}
                 <div class="produto-item">
@@ -18,7 +21,9 @@
                     <p><strong>Quantidade:</strong> {{ produto.quantidade }}</p>
                     <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
                     <p><strong>Categoria:</strong> {{ produto.categoria.nome }}</p>
-                </div>
+                    <!-- Botão de Editar -->
+                    <a href="{% url 'editar_produto' produto.id %}" class="btn-edit">Editar</a>
+                </div>            
             {% empty %}
                 <p>Nenhum produto disponível no momento.</p>
             {% endfor %}
