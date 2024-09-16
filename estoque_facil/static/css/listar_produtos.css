@@ -102,6 +102,21 @@ h1 {
     background-color: #357ABD;
 }
 
+/* Estilo para o botão de deletar */
+.btn-deletar {
+    padding: 8px 12px;
+    background-color: #e94e77;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-deletar:hover {
+    background-color: #c43e5a;
+}
+
 /* Estilo para o formulário de filtro */
 .form-group {
     margin-bottom: 20px;

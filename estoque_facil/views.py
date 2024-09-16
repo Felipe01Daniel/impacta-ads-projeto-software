@@ -26,6 +26,12 @@ def editar_produto(request, produto_id):
     
     return render(request, 'editar_produto.html', {'form': form, 'produto': produto})
 
+def deletar_produto(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+    if request.method == 'POST':
+        produto.delete()
+        return redirect('listar_produtos')
+
 def listar_produtos(request):
     nome_query = request.GET.get('nome', '')
     categoria_query = request.GET.get('categoria', '')
