@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from .forms import ProdutoForm
 from .models import Produto, Categoria
 
@@ -8,6 +9,7 @@ def adicionar_produto(request):
         form = ProdutoForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Produto criado com sucesso!')
             return redirect('adicionar_produto') 
     else:
         form = ProdutoForm()
