@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Categoria(models.Model):
@@ -16,3 +17,30 @@ class Produto(models.Model):
 
     def __str__(self):
         return self.nome
+    
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True, default='profile_pics/default.jpeg')
+    date_of_birth = models.DateField(null=True, blank=True)
+    address = models.CharField(max_length=255, blank=True)
+    phone_number = models.CharField(max_length=15, blank=True)
+    level = models.PositiveIntegerField(default=0)
+    status = models.CharField(max_length=50, default='Colaborador')
+
+    def save(self, *args, **kwargs):
+
+        # Lógica de status conforme o nível
+        if self.level <= 10:
+            self.status = 'Colaborador'
+        elif self.level <= 40:
+            self.status = 'Lider'
+        elif self.level <= 50:
+            self.status = 'Gerente'
+        else:
+            self.status = 'Diretor'
+        
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.user.username

@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Criar Usuário</title>
+    <link rel="stylesheet" href="{% static 'css/create_user.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Criar Novo Usuário</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-row">
+                <div class="form-group">
+                    {{ user_form.username.label_tag }}
+                    {{ user_form.username }}
+                </div>
+                <div class="form-group">
+                    {{ user_form.email.label_tag }}
+                    {{ user_form.email }}
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    {{ user_form.password.label_tag }}
+                    {{ user_form.password }}
+                </div>
+                <div class="form-group">
+                    {{ profile_form.name.label_tag }}
+                    {{ profile_form.name }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ profile_form.date_of_birth.label_tag }}
+                    {{ profile_form.date_of_birth }}
+                </div>
+                <div class="form-group">
+                    {{ profile_form.address.label_tag }}
+                    {{ profile_form.address }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ profile_form.phone_number.label_tag }}
+                    {{ profile_form.phone_number }}
+                </div>
+                <div class="form-group">
+                    {{ profile_form.profile_picture.label_tag }}
+                    {{ profile_form.profile_picture }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ profile_form.level.label_tag }}
+                    {{ profile_form.level }}
+                </div>
+                <div class="form-group">
+                    {{ profile_form.status.label_tag }}
+                    {{ profile_form.status }}
+                </div>
+            </div>
+
+            <div class="form-row submit-row">
+                <a href="{% url 'listar_produtos' %}" class="btn-back">Voltar</a>
+                <button type="submit" class="btn-submit">Criar Usuário</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- script para a máscara de telefone -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const phoneInput = document.querySelector('input[name="phone_number"]');
+            phoneInput.addEventListener("input", function() {
+                let value = phoneInput.value.replace(/\D/g, "");
+                if (value.length > 11) value = value.slice(0, 11);
+                if (value.length > 2 && value.length <= 7) {
+                    value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+                } else if (value.length > 7) {
+                    value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
+                }
+                phoneInput.value = value;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -30,9 +30,15 @@
 </head>
 <body>
     <div class="container">
+        {% if user.is_authenticated %}
+        <span>Bem-vindo, {{ user.username }}</span>
+        <a href="{% url 'logout' %}" class="btn">Sair</a>
         <h1>Lista de Produtos</h1>
         <div class="botao-adicionar">
             <a href="{% url 'adicionar_produto' %}" class="btn-adicionar">Adicionar Produto</a>
+            {% if user.is_superuser %}
+            <a href="{% url 'create_user' %}" class="btn-criar-usuario">Criar Usuário</a>
+            {% endif %}
         </div>
         <form method="GET" action="">
             <div class="form-group">
@@ -66,6 +72,9 @@
                 <p>Nenhum produto disponível no momento.</p>
             {% endfor %}
         </div>
+        {% else %}
+        <h2>Acesso restrito</h2>
+        {% endif %}
     </div>
 </body>
 </html>
