@@ -34,11 +34,15 @@
         <span>Bem-vindo, {{ user.username }}</span>
         <a href="{% url 'logout' %}" class="btn">Sair</a>
         <h1>Lista de Produtos</h1>
+        <div class="acoes">
+            <a href="{% url 'historico_saidas' %}" class="btn-adicionar">Histórico de Saídas</a>
+            <a href="{% url 'listar_clientes' %}" class="btn-adicionar">Lista de Clientes</a>
+        </div>
         <div class="botao-adicionar">
             <a href="{% url 'adicionar_produto' %}" class="btn-adicionar">Adicionar Produto</a>
+            <a href="{% url 'register_customer' %}" class="btn-criar-usuario">Criar Cliente</a>
             {% if user.is_superuser %}
             <a href="{% url 'create_user' %}" class="btn-criar-usuario">Criar Usuário</a>
-            <a href="{% url 'register_customer' %}" class="btn-criar-usuario">Criar Cliente</a>
             {% endif %}
         </div>
         <form method="GET" action="">
@@ -63,11 +67,14 @@
                     <p><strong>Quantidade:</strong> {{ produto.quantidade }}</p>
                     <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
                     <p><strong>Categoria:</strong> {{ produto.categoria.nome }}</p>
+                    {% if user.is_superuser %}
                     <a href="{% url 'editar_produto' produto.id %}" class="btn-edit">Editar</a>
                     <form action="{% url 'deletar_produto' produto.id %}" method="post" style="display:inline;">
                         {% csrf_token %}
                         <button type="button" class="btn-deletar" onclick="confirmDelete(this.form)">Deletar</button>
                     </form>
+                    {% endif %}
+                    <a href="{% url 'registrar_saida' produto.id %}" class="btn-registrar-saida">Registrar Saída</a>
                 </div>            
             {% empty %}
                 <p>Nenhum produto disponível no momento.</p>

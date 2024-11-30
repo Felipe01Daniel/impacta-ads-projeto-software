@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 # Create your models here.
 class Categoria(models.Model):
@@ -64,3 +65,23 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+
+class SaidaProduto(models.Model):
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
+    cliente = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    quantidade = models.PositiveIntegerField()
+    valor_total = models.DecimalField(max_digits=10, decimal_places=2)
+    data_saida = models.DateTimeField(default=now)
+
+    def __str__(self):
+        return f"{self.quantidade} x {self.produto.nome} para {self.cliente.name if self.cliente else 'Desconhecido'}"
+
+    def save(self, *args, **kwargs):
+        if self.quantidade > self.produto.quantidade:
+            raise ValueError("Quantidade solicitada excede o estoque disponível.")
+        self.valor_total = self.quantidade * self.produto.preco
+        self.produto.quantidade -= self.quantidade
+        self.produto.save()
+        super().save(*args, **kwargs)

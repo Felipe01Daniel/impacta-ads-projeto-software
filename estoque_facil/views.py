@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import user_passes_test, login_required
 from .forms import UserForm, UserProfileForm, CustomerForm
 from django.contrib import messages
 from .forms import ProdutoForm
-from .models import Produto, Categoria, Customer
+from .models import Produto, Categoria, SaidaProduto, Customer
 
 # Create your views here.
 def is_admin(user):
@@ -127,3 +127,39 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'Você foi desconectado com sucesso!')
     return redirect('login')
+
+
+def registrar_saida(request, produto_id):
+    produto = get_object_or_404(Produto, id=produto_id)
+    clientes = Customer.objects.all()
+
+    if request.method == "POST":
+        cliente_id = request.POST.get('cliente')
+        quantidade = int(request.POST.get('quantidade', 0))
+
+        if quantidade > produto.quantidade:
+            messages.error(request, "Quantidade excede o estoque disponível.")
+            return redirect('registrar_saida', produto_id=produto_id)
+
+        valor_total = quantidade * produto.preco
+        cliente = Customer.objects.get(id=cliente_id) if cliente_id else None
+
+        SaidaProduto.objects.create(
+            produto=produto,
+            cliente=cliente,
+            quantidade=quantidade,
+            valor_total=valor_total
+        )
+
+        messages.success(request, f"Saída registrada com sucesso! {quantidade} unidades de {produto.nome}.")
+        return redirect('listar_produtos')
+
+    return render(request, 'registrar_saida.html', {'produto': produto, 'clientes': clientes})
+
+
+def historico_saidas(request):
+    if request.user.is_authenticated:
+        historico_saidas = SaidaProduto.objects.select_related('produto', 'cliente').order_by('-data_saida')
+        return render(request, 'historico_saidas.html', {'historico_saidas': historico_saidas})
+    else:
+        return render(request, 'acesso_restrito.html')

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Saídas</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/historico_saidas.css' %}">
+    <!-- SweetAlert2 para confirmações ou mensagens -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+    <div class="container">
+        {% if user.is_authenticated %}
+        <header>
+            <h1>Histórico de Saídas</h1>
+            <a href="{% url 'listar_produtos' %}" class="btn-sair">Voltar</a>
+        </header>
+        <div class="tabela-saidas">
+            {% if historico_saidas %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Valor Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for saida in historico_saidas %}
+                    <tr>
+                        <td>{{ saida.data_saida|date:"d/m/Y H:i" }}</td>
+                        <td>{% if saida.cliente %}{{ saida.cliente.name }}{% else %}Desconhecido{% endif %}</td>
+                        <td>{{ saida.produto.nome }}</td>
+                        <td>{{ saida.quantidade }}</td>
+                        <td>R$ {{ saida.valor_total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>Nenhuma saída registrada.</p>
+            {% endif %}
+        </div>
+        
+        {% else %}
+        <h2>Acesso Restrito</h2>
+        {% endif %}
+    </div>
+</body>
+</html>

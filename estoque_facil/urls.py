@@ -10,6 +10,8 @@ urlpatterns = [
     path('create-user/', views.create_user, name='create_user'),
     path('register-customer/',  views.register_customer, name='register_customer'),
     path('list-customers/', views.listar_clientes, name='listar_clientes'),
+    path('registrar_saida/<int:produto_id>/', views.registrar_saida, name='registrar_saida'),
+    path('historico-saidas/', views.historico_saidas, name='historico_saidas'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
 ]
