@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Produto, UserProfile
+from .models import Produto, UserProfile, Customer
 
 class ProdutoForm(forms.ModelForm):
     class Meta:
@@ -54,3 +54,30 @@ class UserProfileForm(forms.ModelForm):
                 ('Diretor', 'Diretor')
             ])
         }
+
+class CustomerForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = [
+            'type', 'name', 'email', 'phone_number', 'address',
+            'date_of_birth', 'cpf', 'cnpj', 'company_name'
+        ]
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        customer_type = cleaned_data.get('type')
+
+        if customer_type == 'PF':  # Validação para Pessoa Física
+            if not cleaned_data.get('cpf'):
+                self.add_error('cpf', 'CPF é obrigatório para Pessoa Física.')
+            cleaned_data['cnpj'] = None  # Remove o CNPJ
+
+        elif customer_type == 'PJ':  # Validação para Pessoa Jurídica
+            if not cleaned_data.get('cnpj'):
+                self.add_error('cnpj', 'CNPJ é obrigatório para Pessoa Jurídica.')
+            cleaned_data['cpf'] = None  # Remove o CPF
+        
+        return cleaned_data

@@ -38,6 +38,7 @@
             <a href="{% url 'adicionar_produto' %}" class="btn-adicionar">Adicionar Produto</a>
             {% if user.is_superuser %}
             <a href="{% url 'create_user' %}" class="btn-criar-usuario">Criar Usuário</a>
+            <a href="{% url 'register_customer' %}" class="btn-criar-usuario">Criar Cliente</a>
             {% endif %}
         </div>
         <form method="GET" action="">

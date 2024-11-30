@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import user_passes_test, login_required
-from .forms import UserForm, UserProfileForm
+from .forms import UserForm, UserProfileForm, CustomerForm
 from django.contrib import messages
 from .forms import ProdutoForm
-from .models import Produto, Categoria
+from .models import Produto, Categoria, Customer
 
 # Create your views here.
 def is_admin(user):
@@ -90,6 +90,23 @@ def create_user(request):
         'user_form': user_form,
         'profile_form': profile_form
     })
+
+def register_customer(request):
+    if request.method == 'POST':
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Cliente registrado com sucesso!')
+            return redirect('listar_clientes')
+    else:
+        form = CustomerForm()
+
+    return render(request, 'register_customer.html', {'form': form})
+
+
+def listar_clientes(request):
+    clientes = Customer.objects.all()
+    return render(request, 'list_clients.html', {'clientes': clientes})
 
 def login_view(request):
     if request.method == 'POST':

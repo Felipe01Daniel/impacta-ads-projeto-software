@@ -44,3 +44,23 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+class Customer(models.Model):
+    TYPE_CHOICES = [
+        ('PF', 'Pessoa Física'),
+        ('PJ', 'Pessoa Jurídica'),
+    ]
+
+    type = models.CharField(max_length=2, choices=TYPE_CHOICES)
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=15, blank=True)
+    address = models.CharField(max_length=255, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    cpf = models.CharField(max_length=14, blank=True, null=True)
+    cnpj = models.CharField(max_length=18, blank=True, null=True) 
+    company_name = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name

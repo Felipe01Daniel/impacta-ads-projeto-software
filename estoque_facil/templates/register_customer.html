@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Cliente</title>
+    <link rel="stylesheet" href="{% static 'css/create_user.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Registrar Cliente</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form.type.label_tag }}
+                    {{ form.type }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form.name.label_tag }}
+                    {{ form.name }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form.phone_number.label_tag }}
+                    {{ form.phone_number }}
+                </div>
+                <div class="form-group">
+                    {{ form.address.label_tag }}
+                    {{ form.address }}
+                </div>
+            </div>
+
+            <!-- Campos para Pessoa Física -->
+            <div id="pessoa_fisica_fields" class="form-row" style="display: none;">
+                <div class="form-group">
+                    {{ form.date_of_birth.label_tag }}
+                    {{ form.date_of_birth }}
+                </div>
+                <div class="form-group">
+                    {{ form.cpf.label_tag }}
+                    {{ form.cpf }}
+                </div>
+            </div>
+
+            <!-- Campos para Pessoa Jurídica -->
+            <div id="pessoa_juridica_fields" class="form-row" style="display: none;">
+                <div class="form-group">
+                    {{ form.cnpj.label_tag }}
+                    {{ form.cnpj }}
+                </div>
+                <div class="form-group">
+                    {{ form.company_name.label_tag }}
+                    {{ form.company_name }}
+                </div>
+            </div>
+
+            <div class="submit-row">
+                <a href="{% url 'listar_produtos' %}" class="btn-back">Voltar</a>
+                <button type="submit" class="btn-submit">Registrar</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const typeField = document.querySelector('select[name="type"]');
+            const pessoaFisicaFields = document.getElementById('pessoa_fisica_fields');
+            const pessoaJuridicaFields = document.getElementById('pessoa_juridica_fields');
+
+            function toggleFields() {
+                if (typeField.value === 'PF') {
+                    pessoaFisicaFields.style.display = 'flex';
+                    pessoaJuridicaFields.style.display = 'none';
+                } else if (typeField.value === 'PJ') {
+                    pessoaFisicaFields.style.display = 'none';
+                    pessoaJuridicaFields.style.display = 'flex';
+                } else {
+                    pessoaFisicaFields.style.display = 'none';
+                    pessoaJuridicaFields.style.display = 'none';
+                }
+            }
+
+            typeField.addEventListener('change', toggleFields);
+            toggleFields(); // Executar no carregamento da página
+        });
+    </script>
+</body>
+</html>
